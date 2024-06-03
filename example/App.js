@@ -40,6 +40,12 @@ function HomeScreen({navigation}) {
     <View
       style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
       <Button
+        title={'Open PDFTron example pdf'}
+        onPress={() => {
+          navigation.navigate('DocumentView');
+        }}
+      />
+      <Button
         title={'Open File (file system)'}
         onPress={() => {
           DocumentPicker.pickSingle({

@@ -9,7 +9,7 @@ type Props = {};
 export default class DocumentViewExample extends Component<Props> {
   constructor(props) {
     super(props);
-    const {path} = props.route.params;
+    const path = props.route.params?.path;
 
     this.state = {
       path,
@@ -58,19 +58,31 @@ export default class DocumentViewExample extends Component<Props> {
   };
 
   render() {
-    const path = this.state.path;
+    const path =
+      this.state.path ||
+      'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf';
+
     return (
       <DocumentView
         ref={c => (this._viewer = c)}
+        hideAnnotationToolbarSwitcher={false}
+        hideTopToolbars={false}
+        hideTopAppNavBar={false}
         document={path}
         readOnly={false}
         autoSaveEnabled={false}
         initialToolbar={Config.DefaultToolbars.Draw}
+        padStatusBar={true}
         showLeadingNavButton={true}
         saveStateEnabled={false}
         rememberLastUsedTool={false}
         documentSliderEnabled={false}
         hideToolbarsOnTap={false}
+        disabledElements={[Config.Buttons.userBookmarkListButton]}
+        disabledTools={[
+          Config.Tools.annotationCreateLine,
+          Config.Tools.annotationCreateRectangle,
+        ]}
         fitMode={Config.FitMode.FitPage}
         pageIndicatorEnabled={false}
         layoutMode={Config.LayoutMode.Continuous}
