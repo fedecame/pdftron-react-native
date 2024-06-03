@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
+import {launchImageLibrary} from 'react-native-image-picker';
 import DocumentViewExample from './DocumentView';
 
 const workingImageAssetPath = require('./assets/images/image.png');
@@ -43,6 +44,29 @@ function HomeScreen({navigation}) {
         title={'Open PDFTron example pdf'}
         onPress={() => {
           navigation.navigate('DocumentView');
+        }}
+      />
+      <Button
+        title={'Open Image (Gallery/Photo Library)'}
+        onPress={() => {
+          launchImageLibrary(
+            {
+              mediaType: 'photo',
+            },
+            response => {
+              if (response.didCancel) {
+                console.log('User cancelled image picker');
+              } else if (response.errorCode) {
+                console.error('ImagePicker Error: ', response.errorMessage);
+              } else if (response.assets) {
+                const imagePath = response.assets[0].uri;
+                console.log('Image Path: ', imagePath);
+                navigation.navigate('DocumentView', {
+                  path: imagePath,
+                });
+              }
+            },
+          );
         }}
       />
       <Button
