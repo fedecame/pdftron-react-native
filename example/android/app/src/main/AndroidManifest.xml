@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.example">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -12,11 +11,12 @@
       android:allowBackup="false"
       android:theme="@style/AppTheme"
       android:largeHeap="true"
-      android:usesCleartextTraffic="true">
+      android:usesCleartextTraffic="true"
+      android:supportsRtl="true">
 
       <meta-data
         android:name="pdftron_license_key"
-        android:value="${pdftronLicenseKey}" />
+        android:value="YOUR_PDFTRON_LICENSE_KEY" />
 
       <activity
         android:name=".MainActivity"

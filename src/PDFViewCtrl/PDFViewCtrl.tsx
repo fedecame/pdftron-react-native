@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { PureComponent } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import {
@@ -31,4 +32,4 @@ export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
 
 const name = Platform.OS === 'ios' ? 'RNTPTPDFViewCtrl' : 'RCTPDFViewCtrl';
 
-const RCTPDFViewCtrl = requireNativeComponent(name);
+const RCTPDFViewCtrl: any = requireNativeComponent(name);

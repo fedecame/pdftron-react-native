@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { PureComponent } from 'react';
 import PropTypes, { Requireable, Validator } from 'prop-types';
 import {
@@ -1278,4 +1279,4 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
 const name = Platform.OS === 'ios' ? 'RNTPTDocumentView' : 'RCTDocumentView';
 
-const RCTDocumentView = requireNativeComponent(name);
+const RCTDocumentView: any = requireNativeComponent(name);

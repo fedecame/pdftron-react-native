@@ -9,6 +9,7 @@ import {
   Alert
 } from 'react-native';
 
+import RNFS from 'react-native-fs';
 import { DocumentView, RNPdftron, Config } from 'react-native-pdftron';
 
 type Props = {};
@@ -16,6 +17,26 @@ export default class App extends Component<Props> {
 
   constructor(props) {
     super(props);
+    this.state = { localPath: null };
+  }
+
+  async componentDidMount() {
+    // Copy bundled PDF to Documents directory (where PDFTron can read it)
+    const destPath = `${RNFS.DocumentDirectoryPath}/autocad_generated_pdf.pdf`;
+
+    try {
+      if (Platform.OS === 'ios') {
+        const sourcePath = `${RNFS.MainBundlePath}/autocad_generated_pdf.pdf`;
+        await RNFS.copyFile(sourcePath, destPath);
+      } else {
+        // For Android, assets are read differently
+        const sourcePath = 'autocad_generated_pdf.pdf'; // will be auto-resolved if in android/app/src/main/assets
+        await RNFS.copyFileAssets(sourcePath, destPath);
+      }
+      this.setState({ localPath: destPath });
+    } catch (e) {
+      console.error('Failed to copy PDF:', e);
+    }
   }
 
   onLeadingNavButtonPressed = () => {
@@ -78,20 +99,23 @@ export default class App extends Component<Props> {
     const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf";
     const myToolbar = {
       [Config.CustomToolbarKey.Id]: 'myToolbar',
-      [Config.CustomToolbarKey.Name]: 'myToolbar', 
+      [Config.CustomToolbarKey.Name]: 'myToolbar',
       [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
       [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, Config.Buttons.undo]
     };
 
+    if (!this.state.localPath) return null;
+
     return (
       <DocumentView
           ref={(c) => this._viewer = c}
+          style={styles.container}
           // hideDefaultAnnotationToolbars={[Config.DefaultToolbars.Annotate]}
           // annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
           hideAnnotationToolbarSwitcher={false}
           hideTopToolbars={false}
           hideTopAppNavBar={false}
-          document={path}
+          document={this.state.localPath}
           padStatusBar={true}
           showLeadingNavButton={true}
           leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
